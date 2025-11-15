@@ -226,6 +226,187 @@ class DemoPlugin {
       aliases: ['dv']
     });
 
+    // Command 5: List players
+    chatCommands.register('players', (source) => {
+      const players = [];
+      for (let i = 0; i < GetNumPlayerIndices(); i++) {
+        const playerId = GetPlayerFromIndex(i);
+        const name = GetPlayerName(playerId);
+        players.push(`^5[${playerId}]^7 ${name}`);
+      }
+
+      chatCommands.sendMessage(source, `^3=== Online Players (${players.length}) ===`);
+      players.forEach(player => chatCommands.sendMessage(source, player));
+    }, {
+      description: 'List online players',
+      aliases: ['online', 'list']
+    });
+
+    // Command 6: Announce (admin)
+    chatCommands.register('announce', (source, args) => {
+      if (args.length === 0) {
+        chatCommands.sendMessage(source, '^1Usage: ^7/announce <message>');
+        return;
+      }
+
+      const message = args.join(' ');
+      chatCommands.broadcast(`^3[ANNOUNCEMENT] ^7${message}`);
+      console.log(`[Demo] Player ${source} announced: ${message}`);
+    }, {
+      description: 'Broadcast message to all players',
+      permission: 'command.announce',
+      aliases: ['broadcast', 'ann'],
+      params: [
+        { name: 'message', help: 'Message to broadcast' }
+      ]
+    });
+
+    // Command 7: Goto player (admin)
+    chatCommands.register('goto', (source, args) => {
+      if (args.length === 0) {
+        chatCommands.sendMessage(source, '^1Usage: ^7/goto <player_id>');
+        return;
+      }
+
+      const targetId = parseInt(args[0]);
+      if (isNaN(targetId) || !GetPlayerPed(targetId)) {
+        chatCommands.sendMessage(source, '^1Error: ^7Invalid player ID');
+        return;
+      }
+
+      const targetPed = GetPlayerPed(targetId);
+      const [x, y, z] = GetEntityCoords(targetPed);
+
+      const ped = GetPlayerPed(source);
+      SetEntityCoords(ped, x, y, z, false, false, false, false);
+
+      chatCommands.sendMessage(source, `^2Teleported to ^7${GetPlayerName(targetId)}`);
+    }, {
+      description: 'Teleport to a player',
+      permission: 'command.goto',
+      aliases: ['tp'],
+      params: [
+        { name: 'player_id', help: 'Target player ID' }
+      ]
+    });
+
+    // Command 8: Bring player (admin)
+    chatCommands.register('bring', (source, args) => {
+      if (args.length === 0) {
+        chatCommands.sendMessage(source, '^1Usage: ^7/bring <player_id>');
+        return;
+      }
+
+      const targetId = parseInt(args[0]);
+      if (isNaN(targetId) || !GetPlayerPed(targetId)) {
+        chatCommands.sendMessage(source, '^1Error: ^7Invalid player ID');
+        return;
+      }
+
+      const ped = GetPlayerPed(source);
+      const [x, y, z] = GetEntityCoords(ped);
+
+      const targetPed = GetPlayerPed(targetId);
+      SetEntityCoords(targetPed, x, y, z, false, false, false, false);
+
+      chatCommands.sendMessage(source, `^2Brought ^7${GetPlayerName(targetId)}^2 to you`);
+      chatCommands.sendMessage(targetId, `^2You were brought to ^7${GetPlayerName(source)}`);
+    }, {
+      description: 'Bring a player to you',
+      permission: 'command.bring',
+      params: [
+        { name: 'player_id', help: 'Target player ID' }
+      ]
+    });
+
+    // Command 9: Heal player
+    chatCommands.register('heal', (source, args) => {
+      let targetId = source;
+
+      if (args.length > 0) {
+        targetId = parseInt(args[0]);
+        if (isNaN(targetId) || !GetPlayerPed(targetId)) {
+          chatCommands.sendMessage(source, '^1Error: ^7Invalid player ID');
+          return;
+        }
+      }
+
+      const targetPed = GetPlayerPed(targetId);
+      SetEntityHealth(targetPed, 200);
+
+      if (targetId === source) {
+        chatCommands.sendMessage(source, '^2You healed yourself');
+      } else {
+        chatCommands.sendMessage(source, `^2Healed ^7${GetPlayerName(targetId)}`);
+        chatCommands.sendMessage(targetId, `^2You were healed by ^7${GetPlayerName(source)}`);
+      }
+    }, {
+      description: 'Heal yourself or a player',
+      params: [
+        { name: 'player_id', help: 'Target player ID (optional)' }
+      ]
+    });
+
+    // Command 10: Give weapon (admin)
+    chatCommands.register('weapon', (source, args) => {
+      if (args.length === 0) {
+        chatCommands.sendMessage(source, '^1Usage: ^7/weapon <weapon_name>');
+        chatCommands.sendMessage(source, '^5Examples: ^7pistol, smg, rifle, shotgun');
+        return;
+      }
+
+      const weaponName = args[0].toLowerCase();
+      const weapons = {
+        'pistol': 'WEAPON_PISTOL',
+        'smg': 'WEAPON_SMG',
+        'rifle': 'WEAPON_ASSAULTRIFLE',
+        'shotgun': 'WEAPON_PUMPSHOTGUN',
+        'sniper': 'WEAPON_SNIPERRIFLE',
+        'rpg': 'WEAPON_RPG'
+      };
+
+      const weaponHash = weapons[weaponName] || weaponName.toUpperCase();
+      const ped = GetPlayerPed(source);
+
+      GiveWeaponToPed(ped, GetHashKey(weaponHash), 250, false, true);
+      chatCommands.sendMessage(source, `^2Weapon given: ^7${weaponName}`);
+    }, {
+      description: 'Give yourself a weapon',
+      permission: 'command.weapon',
+      aliases: ['gun'],
+      params: [
+        { name: 'weapon_name', help: 'Weapon name' }
+      ]
+    });
+
+    // Command 11: Clear chat
+    chatCommands.register('clear', (source) => {
+      // Send empty lines to clear chat
+      for (let i = 0; i < 50; i++) {
+        chatCommands.sendMessage(source, ' ');
+      }
+      chatCommands.sendMessage(source, '^2Chat cleared');
+    }, {
+      description: 'Clear your chat',
+      aliases: ['cls']
+    });
+
+    // Command 12: Performance stats
+    chatCommands.register('perf', (source) => {
+      const performanceModule = this.framework.getModule('performance');
+
+      chatCommands.sendMessage(source, '^3=== Server Performance ===');
+      chatCommands.sendMessage(source, `^5Players: ^7${GetNumPlayerIndices()}/${GetConvarInt('sv_maxclients', 32)}`);
+      chatCommands.sendMessage(source, `^5Server Time: ^7${new Date().toLocaleTimeString()}`);
+      chatCommands.sendMessage(source, `^5Uptime: ^7${Math.floor(process.uptime() / 60)} minutes`);
+
+      if (performanceModule) {
+        chatCommands.sendMessage(source, '^7Use ^5F10 ^7to toggle client performance overlay');
+      }
+    }, {
+      description: 'Show server performance stats'
+    });
+
     console.log('[Demo] ✅ Chat commands registered');
   }
 

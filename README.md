@@ -11,7 +11,7 @@ This plugin demonstrates every feature of the NextGen Core framework in a practi
 ### ✅ Server-Side
 - EventBus for custom events
 - RPC handlers (4 endpoints)
-- Chat commands (4 commands)
+- Chat commands (16 commands)
 - Player data management
 - Hooks system
 - Plugin lifecycle (init/destroy)
@@ -51,12 +51,32 @@ The plugin will be **auto-detected** by ng-core via `ng-plugin.json`.
 
 ### Commands
 
-| Command | Description | Usage |
-|---------|-------------|-------|
-| `/demo` | Show plugin information | `/demo` |
-| `/demomoney` | Give yourself money | `/demomoney [amount]` |
-| `/demoteleport` | Teleport to locations | `/demoteleport <location>` |
-| `/demovehicle` | Spawn vehicle | `/demovehicle [model]` |
+#### Demo Commands
+
+| Command | Description | Usage | Aliases |
+|---------|-------------|-------|---------|
+| `/demo` | Show plugin information | `/demo` | `/demoinfo` |
+| `/demomoney` | Give yourself money | `/demomoney [amount]` | - |
+| `/demoteleport` | Teleport to locations | `/demoteleport <location>` | `/dtp` |
+| `/demovehicle` | Spawn vehicle | `/demovehicle [model]` | `/dv` |
+
+#### Utility Commands
+
+| Command | Description | Usage | Aliases | Permission |
+|---------|-------------|-------|---------|------------|
+| `/players` | List online players | `/players` | `/online`, `/list` | - |
+| `/clear` | Clear your chat | `/clear` | `/cls` | - |
+| `/perf` | Server performance stats | `/perf` | - | - |
+| `/heal` | Heal yourself or player | `/heal [player_id]` | - | - |
+
+#### Admin Commands
+
+| Command | Description | Usage | Aliases | Permission |
+|---------|-------------|-------|---------|------------|
+| `/announce` | Broadcast message | `/announce <message>` | `/broadcast`, `/ann` | `command.announce` |
+| `/goto` | Teleport to player | `/goto <player_id>` | `/tp` | `command.goto` |
+| `/bring` | Bring player to you | `/bring <player_id>` | - | `command.bring` |
+| `/weapon` | Give yourself weapon | `/weapon <name>` | `/gun` | `command.weapon` |
 
 **Teleport Locations**:
 - `ls` - Legion Square
