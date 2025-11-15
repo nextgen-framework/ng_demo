@@ -1,0 +1,22 @@
+# Logs
+*.log
+logs/
+
+# Environment
+.env
+.env.local
+
+# Cache
+.cache/
+cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,21 @@
+{
+  "name": "ng-demo",
+  "version": "1.0.0",
+  "description": "Complete demonstration plugin for NextGen Framework",
+  "author": "NextGen Team",
+  "entry": "server.js",
+  "clientEntry": "client.js",
+  "priority": 100,
+  "ngCoreVersion": "^1.0.0",
+  "features": [
+    "EventBus usage",
+    "RPC communication",
+    "Chat commands",
+    "Notifications",
+    "Performance monitoring",
+    "State management",
+    "Player interactions",
+    "UI display",
+    "Key bindings"
+  ]
+}

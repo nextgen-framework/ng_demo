@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NextGen Framework Test UI</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app" class="hidden">
+    <!-- Header -->
+    <div class="header">
+      <h1>🎮 NextGen Framework Test Panel</h1>
+      <div class="header-info">
+        <span id="module-count">28 Modules Loaded</span>
+        <button id="close-btn" class="btn btn-danger">✖ Close (ESC)</button>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="overview">📊 Overview</button>
+      <button class="tab-btn" data-tab="player">👤 Player</button>
+      <button class="tab-btn" data-tab="world">🌍 World</button>
+      <button class="tab-btn" data-tab="economy">💰 Economy</button>
+      <button class="tab-btn" data-tab="vehicles">🚗 Vehicles</button>
+      <button class="tab-btn" data-tab="zones">📍 Zones</button>
+      <button class="tab-btn" data-tab="admin">⚙️ Admin</button>
+      <button class="tab-btn" data-tab="debug">🐛 Debug</button>
+    </div>
+
+    <!-- Content Panels -->
+    <div class="content">
+      <!-- Overview Tab -->
+      <div id="overview-tab" class="tab-content active">
+        <div class="panel">
+          <h2>Framework Status</h2>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-value" id="total-modules">28</div>
+              <div class="stat-label">Total Modules</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="online-players">0</div>
+              <div class="stat-label">Online Players</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="active-zones">0</div>
+              <div class="stat-label">Active Zones</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="db-tables">23</div>
+              <div class="stat-label">Database Tables</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Module Status</h2>
+          <div id="module-list" class="module-grid">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Player Tab -->
+      <div id="player-tab" class="tab-content">
+        <div class="panel">
+          <h2>Character Management</h2>
+          <div class="form-group">
+            <label>Current Character:</label>
+            <div id="current-character">No character selected</div>
+          </div>
+          <div class="button-group">
+            <button class="btn btn-primary" onclick="testCharacter('create')">Create Character</button>
+            <button class="btn btn-secondary" onclick="testCharacter('list')">List Characters</button>
+            <button class="btn btn-warning" onclick="testCharacter('delete')">Delete Character</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Money Manager</h2>
+          <div class="form-group">
+            <label>Cash:</label>
+            <span id="player-cash">$0</span>
+          </div>
+          <div class="form-group">
+            <label>Bank:</label>
+            <span id="player-bank">$0</span>
+          </div>
+          <div class="button-group">
+            <button class="btn btn-success" onclick="testMoney('add', 1000)">Add $1000</button>
+            <button class="btn btn-danger" onclick="testMoney('remove', 500)">Remove $500</button>
+            <button class="btn btn-primary" onclick="testMoney('refresh')">Refresh</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Spawn Manager</h2>
+          <div class="button-group">
+            <button class="btn btn-primary" onclick="testSpawn('save')">Save Position</button>
+            <button class="btn btn-secondary" onclick="testSpawn('last')">Teleport to Last</button>
+            <button class="btn btn-warning" onclick="testSpawn('random')">Random Spawn</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- World Tab -->
+      <div id="world-tab" class="tab-content">
+        <div class="panel">
+          <h2>World Sync</h2>
+          <div class="form-group">
+            <label>Weather:</label>
+            <select id="weather-select" onchange="testWeather(this.value)">
+              <option value="CLEAR">Clear</option>
+              <option value="RAIN">Rain</option>
+              <option value="THUNDER">Thunder</option>
+              <option value="FOG">Fog</option>
+              <option value="SNOW">Snow</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Time:</label>
+            <input type="number" id="time-hour" min="0" max="23" value="12">
+            <button class="btn btn-primary" onclick="testTime()">Set Time</button>
+          </div>
+          <div class="button-group">
+            <button class="btn btn-warning" onclick="testBlackout(true)">Enable Blackout</button>
+            <button class="btn btn-success" onclick="testBlackout(false)">Disable Blackout</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Instance Manager</h2>
+          <div class="form-group">
+            <label>Current Instance:</label>
+            <span id="current-instance">0</span>
+          </div>
+          <div class="button-group">
+            <button class="btn btn-primary" onclick="testInstance('create')">Create Instance</button>
+            <button class="btn btn-secondary" onclick="testInstance('join')">Join Instance</button>
+            <button class="btn btn-warning" onclick="testInstance('leave')">Leave Instance</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Target System</h2>
+          <div class="form-group">
+            <label>Status:</label>
+            <span id="target-status">Active</span>
+          </div>
+          <div class="button-group">
+            <button class="btn btn-primary" onclick="testTarget('trace')">Toggle Debug Trace</button>
+            <button class="btn btn-secondary" onclick="testTarget('spawn')">Spawn Test Vehicle</button>
+            <button class="btn btn-warning" onclick="testTarget('cleanup')">Cleanup</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Economy Tab -->
+      <div id="economy-tab" class="tab-content">
+        <div class="panel">
+          <h2>Organizations</h2>
+          <div class="form-group">
+            <label>Current Organization:</label>
+            <span id="current-org">None</span>
+          </div>
+          <div class="button-group">
+            <button class="btn btn-primary" onclick="testOrg('join', 'police')">Join Police</button>
+            <button class="btn btn-primary" onclick="testOrg('join', 'ambulance')">Join EMS</button>
+            <button class="btn btn-warning" onclick="testOrg('leave')">Leave Org</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Containers</h2>
+          <div class="form-group">
+            <label>Inventory Weight:</label>
+            <span id="inventory-weight">0/100 kg</span>
+          </div>
+          <div class="button-group">
+            <button class="btn btn-primary" onclick="testContainer('create')">Create Container</button>
+            <button class="btn btn-secondary" onclick="testContainer('addItem')">Add Item</button>
+            <button class="btn btn-warning" onclick="testContainer('clear')">Clear</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vehicles Tab -->
+      <div id="vehicles-tab" class="tab-content">
+        <div class="panel">
+          <h2>Vehicle Manager</h2>
+          <div class="form-group">
+            <label>My Vehicles:</label>
+            <div id="vehicle-list">No vehicles</div>
+          </div>
+          <div class="button-group">
+            <button class="btn btn-success" onclick="testVehicle('create')">Create Vehicle</button>
+            <button class="btn btn-primary" onclick="testVehicle('spawn')">Spawn Nearby</button>
+            <button class="btn btn-danger" onclick="testVehicle('delete')">Delete Vehicle</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Access Manager</h2>
+          <div class="button-group">
+            <button class="btn btn-primary" onclick="testAccess('giveKey')">Give Vehicle Key</button>
+            <button class="btn btn-warning" onclick="testAccess('removeKey')">Remove Key</button>
+            <button class="btn btn-secondary" onclick="testAccess('checkKeys')">Check My Keys</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Zones Tab -->
+      <div id="zones-tab" class="tab-content">
+        <div class="panel">
+          <h2>Zone Manager</h2>
+          <div class="form-group">
+            <label>Active Zones:</label>
+            <div id="active-zones-list">None</div>
+          </div>
+          <div class="button-group">
+            <button class="btn btn-primary" onclick="testZone('create')">Create Test Zone</button>
+            <button class="btn btn-secondary" onclick="testZone('list')">List Zones</button>
+            <button class="btn btn-warning" onclick="testZone('teleport')">TP to Zone</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Session Manager</h2>
+          <div class="form-group">
+            <label>Current Session:</label>
+            <span id="current-session">None</span>
+          </div>
+          <div class="button-group">
+            <button class="btn btn-success" onclick="testSession('create')">Create Session</button>
+            <button class="btn btn-primary" onclick="testSession('join')">Join Session</button>
+            <button class="btn btn-danger" onclick="testSession('leave')">Leave Session</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Admin Tab -->
+      <div id="admin-tab" class="tab-content">
+        <div class="panel">
+          <h2>Admin Tools</h2>
+          <div class="form-group">
+            <label>Permission Level:</label>
+            <span id="admin-level">0 (No access)</span>
+          </div>
+          <div class="button-group">
+            <button class="btn btn-primary" onclick="testAdmin('noclip')">Toggle Noclip</button>
+            <button class="btn btn-secondary" onclick="testAdmin('tp')">Teleport</button>
+            <button class="btn btn-success" onclick="testAdmin('giveMoney')">Give Money</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Performance Monitor</h2>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-value" id="fps">60</div>
+              <div class="stat-label">FPS</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="ping">0</div>
+              <div class="stat-label">Ping (ms)</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="memory">0</div>
+              <div class="stat-label">Memory (MB)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Debug Tab -->
+      <div id="debug-tab" class="tab-content">
+        <div class="panel">
+          <h2>Debug Console</h2>
+          <div id="debug-console" class="console">
+            <div class="console-line">✅ Framework initialized</div>
+            <div class="console-line">📦 28 modules loaded</div>
+            <div class="console-line">🎮 Test UI ready</div>
+          </div>
+          <div class="button-group">
+            <button class="btn btn-warning" onclick="clearConsole()">Clear Console</button>
+            <button class="btn btn-primary" onclick="testAll()">Run All Tests</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Quick Actions</h2>
+          <div class="button-group">
+            <button class="btn btn-success" onclick="quickAction('healPlayer')">Heal Player</button>
+            <button class="btn btn-primary" onclick="quickAction('fixVehicle')">Fix Vehicle</button>
+            <button class="btn btn-warning" onclick="quickAction('clearWanted')">Clear Wanted</button>
+            <button class="btn btn-danger" onclick="quickAction('killPlayer')">Kill Player</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="nui://game/ui/jquery.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
