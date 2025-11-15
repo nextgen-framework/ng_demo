@@ -3,7 +3,7 @@
  * Demonstrates all features of the target module
  */
 
-const framework = exports['ng-core'].GetFramework();
+let framework = null;
 let target = null;
 
 // Demo vehicles spawned for testing
@@ -11,8 +11,23 @@ const demoVehicles = [];
 
 // Wait for framework to be ready
 setImmediate(async () => {
-  // Wait for target module to be available
+  // Wait for framework to be available
   let attempts = 0;
+  while (!framework && attempts < 50) {
+    framework = exports['ng-core'].GetFramework();
+    if (!framework) {
+      await new Promise(resolve => setTimeout(resolve, 100));
+      attempts++;
+    }
+  }
+
+  if (!framework) {
+    console.error('[Target Demo] Framework not found after waiting!');
+    return;
+  }
+
+  // Wait for target module to be available
+  attempts = 0;
   while (!target && attempts < 50) {
     target = framework.getModule('target');
     if (!target) {

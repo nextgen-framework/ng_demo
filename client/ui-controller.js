@@ -30,6 +30,24 @@ RegisterNUICallback('closeUI', (data, cb) => {
   cb({ ok: true });
 });
 
+// Handle ESC key to close UI
+setTick(() => {
+  if (isUIOpen) {
+    // Disable controls while UI is open
+    DisableControlAction(0, 1, true); // LookLeftRight
+    DisableControlAction(0, 2, true); // LookUpDown
+    DisableControlAction(0, 24, true); // Attack
+    DisableControlAction(0, 25, true); // Aim
+    DisableControlAction(0, 142, true); // MeleeAttackAlternate
+    DisableControlAction(0, 106, true); // VehicleMouseControlOverride
+
+    // Check for ESC key
+    if (IsControlJustReleased(0, 322)) { // ESC key
+      toggleUI();
+    }
+  }
+});
+
 // Framework Stats
 RegisterNUICallback('getFrameworkStats', (data, cb) => {
   cb({
