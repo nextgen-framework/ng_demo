@@ -1,0 +1,57 @@
+name: Validate
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Validate fxmanifest.lua
+      run: |
+        test -f fxmanifest.lua || (echo "fxmanifest.lua not found" && exit 1)
+        grep -q "fx_version" fxmanifest.lua || (echo "Missing fx_version" && exit 1)
+        grep -q "game" fxmanifest.lua || (echo "Missing game declaration" && exit 1)
+        grep -q "ng-core" fxmanifest.lua || (echo "Missing ng-core dependency" && exit 1)
+        grep -q "ui_page" fxmanifest.lua || (echo "Missing ui_page declaration" && exit 1)
+        echo "✅ fxmanifest.lua is valid"
+
+    - name: Check required files
+      run: |
+        test -f server.js || (echo "Missing server.js" && exit 1)
+        test -f client.js || (echo "Missing client.js" && exit 1)
+        test -f README.md || (echo "Missing README.md" && exit 1)
+        echo "✅ All required files present"
+
+    - name: Check client scripts
+      run: |
+        for script in client/demos/target-demo.js client/ui-controller.js; do
+          if [ -f "$script" ]; then
+            echo "✅ Found $script"
+          else
+            echo "❌ Missing $script"
+            exit 1
+          fi
+        done
+
+    - name: Validate JavaScript syntax
+      run: |
+        # Check for basic syntax errors (ES2017+)
+        node --check server.js || (echo "Syntax error in server.js" && exit 1)
+        node --check client.js || (echo "Syntax error in client.js" && exit 1)
+        node --check client/demos/target-demo.js || (echo "Syntax error in client/demos/target-demo.js" && exit 1)
+        node --check client/ui-controller.js || (echo "Syntax error in client/ui-controller.js" && exit 1)
+        echo "✅ JavaScript syntax is valid"
+
+    - name: Check UI directory
+      run: |
+        test -d ui || (echo "Missing ui directory" && exit 1)
+        test -d ui/dist || echo "⚠️  UI not built (ui/dist missing) - build locally before deployment"
+        echo "✅ UI directory structure validated"
