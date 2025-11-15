@@ -11,13 +11,18 @@ const demoVehicles = [];
 
 // Wait for framework to be ready
 setImmediate(async () => {
-  while (!framework.isReady()) {
-    await new Promise(resolve => setTimeout(resolve, 100));
+  // Wait for target module to be available
+  let attempts = 0;
+  while (!target && attempts < 50) {
+    target = framework.getModule('target');
+    if (!target) {
+      await new Promise(resolve => setTimeout(resolve, 100));
+      attempts++;
+    }
   }
 
-  target = framework.getModule('target');
   if (!target) {
-    console.error('[Target Demo] Target module not found!');
+    console.error('[Target Demo] Target module not found after waiting!');
     return;
   }
 
