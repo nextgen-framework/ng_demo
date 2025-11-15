@@ -407,6 +407,139 @@ class DemoPlugin {
       description: 'Show server performance stats'
     });
 
+    // Command 13: Whitelist add (admin)
+    chatCommands.register('wladd', (source, args) => {
+      if (args.length === 0) {
+        chatCommands.sendMessage(source, '^1Usage: ^7/wladd <identifier>');
+        chatCommands.sendMessage(source, '^5Example: ^7/wladd license:716a655091a9c8579d4709deb5cfec4da3902774');
+        return;
+      }
+
+      const identifier = args[0];
+      const whitelist = this.framework.getModule('whitelist');
+
+      if (!whitelist) {
+        chatCommands.sendMessage(source, '^1Error: ^7Whitelist module not loaded');
+        return;
+      }
+
+      const adminName = GetPlayerName(source);
+      whitelist.add(identifier, adminName, 'Added via command')
+        .then(result => {
+          if (result.success) {
+            chatCommands.sendMessage(source, `^2✓ Added to whitelist: ^7${identifier}`);
+            console.log(`[Demo] ${adminName} added ${identifier} to whitelist`);
+          } else if (result.reason === 'already_whitelisted') {
+            chatCommands.sendMessage(source, `^3⚠ Already whitelisted: ^7${identifier}`);
+          } else {
+            chatCommands.sendMessage(source, `^1Error: ^7${result.reason}`);
+          }
+        })
+        .catch(error => {
+          chatCommands.sendMessage(source, `^1Error: ^7${error.message}`);
+        });
+    }, {
+      description: 'Add player to whitelist',
+      permission: 'command.whitelist',
+      params: [
+        { name: 'identifier', help: 'Player identifier (e.g., license:xxx)' }
+      ]
+    });
+
+    // Command 14: Whitelist remove (admin)
+    chatCommands.register('wlremove', (source, args) => {
+      if (args.length === 0) {
+        chatCommands.sendMessage(source, '^1Usage: ^7/wlremove <identifier>');
+        return;
+      }
+
+      const identifier = args[0];
+      const whitelist = this.framework.getModule('whitelist');
+
+      if (!whitelist) {
+        chatCommands.sendMessage(source, '^1Error: ^7Whitelist module not loaded');
+        return;
+      }
+
+      const adminName = GetPlayerName(source);
+      whitelist.remove(identifier, adminName, 'Removed via command')
+        .then(result => {
+          if (result.success) {
+            chatCommands.sendMessage(source, `^2✓ Removed from whitelist: ^7${identifier}`);
+            console.log(`[Demo] ${adminName} removed ${identifier} from whitelist`);
+          } else if (result.reason === 'not_found') {
+            chatCommands.sendMessage(source, `^3⚠ Not found in whitelist: ^7${identifier}`);
+          } else {
+            chatCommands.sendMessage(source, `^1Error: ^7${result.reason}`);
+          }
+        })
+        .catch(error => {
+          chatCommands.sendMessage(source, `^1Error: ^7${error.message}`);
+        });
+    }, {
+      description: 'Remove player from whitelist',
+      permission: 'command.whitelist',
+      aliases: ['wldel'],
+      params: [
+        { name: 'identifier', help: 'Player identifier' }
+      ]
+    });
+
+    // Command 15: Whitelist list (admin)
+    chatCommands.register('wllist', (source) => {
+      const whitelist = this.framework.getModule('whitelist');
+
+      if (!whitelist) {
+        chatCommands.sendMessage(source, '^1Error: ^7Whitelist module not loaded');
+        return;
+      }
+
+      whitelist.getAll()
+        .then(list => {
+          chatCommands.sendMessage(source, `^3=== Whitelist (${list.length} entries) ===`);
+          if (list.length === 0) {
+            chatCommands.sendMessage(source, '^7No whitelisted players');
+          } else {
+            list.slice(0, 20).forEach((entry, i) => {
+              const date = new Date(entry.added_at).toLocaleDateString();
+              chatCommands.sendMessage(source, `^5${i + 1}. ^7${entry.identifier} ^5(by ${entry.added_by}, ${date})`);
+            });
+            if (list.length > 20) {
+              chatCommands.sendMessage(source, `^7... and ${list.length - 20} more`);
+            }
+          }
+        })
+        .catch(error => {
+          chatCommands.sendMessage(source, `^1Error: ^7${error.message}`);
+        });
+    }, {
+      description: 'List whitelisted players',
+      permission: 'command.whitelist'
+    });
+
+    // Command 16: Whitelist toggle (admin)
+    chatCommands.register('wltoggle', (source) => {
+      const whitelist = this.framework.getModule('whitelist');
+
+      if (!whitelist) {
+        chatCommands.sendMessage(source, '^1Error: ^7Whitelist module not loaded');
+        return;
+      }
+
+      if (whitelist.isEnabled()) {
+        whitelist.disable();
+        chatCommands.sendMessage(source, '^3⚠ Whitelist disabled');
+        chatCommands.broadcast('^3Server whitelist has been disabled');
+      } else {
+        whitelist.enable();
+        chatCommands.sendMessage(source, '^2✓ Whitelist enabled');
+        chatCommands.broadcast('^2Server whitelist has been enabled');
+      }
+    }, {
+      description: 'Toggle whitelist on/off',
+      permission: 'command.whitelist'
+    });
+
     console.log('[Demo] ✅ Chat commands registered');
   }
 

@@ -11,8 +11,9 @@ This plugin demonstrates every feature of the NextGen Core framework in a practi
 ### ✅ Server-Side
 - EventBus for custom events
 - RPC handlers (4 endpoints)
-- Chat commands (16 commands)
+- Chat commands (20 commands)
 - Player data management
+- Whitelist management
 - Hooks system
 - Plugin lifecycle (init/destroy)
 
@@ -77,6 +78,15 @@ The plugin will be **auto-detected** by ng-core via `ng-plugin.json`.
 | `/goto` | Teleport to player | `/goto <player_id>` | `/tp` | `command.goto` |
 | `/bring` | Bring player to you | `/bring <player_id>` | - | `command.bring` |
 | `/weapon` | Give yourself weapon | `/weapon <name>` | `/gun` | `command.weapon` |
+
+#### Whitelist Commands
+
+| Command | Description | Usage | Aliases | Permission |
+|---------|-------------|-------|---------|------------|
+| `/wladd` | Add player to whitelist | `/wladd <identifier>` | - | `command.whitelist` |
+| `/wlremove` | Remove player from whitelist | `/wlremove <identifier>` | `/wldel` | `command.whitelist` |
+| `/wllist` | List whitelisted players | `/wllist` | - | `command.whitelist` |
+| `/wltoggle` | Toggle whitelist on/off | `/wltoggle` | - | `command.whitelist` |
 
 **Teleport Locations**:
 - `ls` - Legion Square
