@@ -540,6 +540,48 @@ class DemoPlugin {
       permission: 'command.whitelist'
     });
 
+    // Command 17: Whitelist myself
+    chatCommands.register('wlme', (source) => {
+      const whitelist = this.framework.getModule('whitelist');
+
+      if (!whitelist) {
+        chatCommands.sendMessage(source, '^1Error: ^7Whitelist module not loaded');
+        return;
+      }
+
+      // Get player's license identifier
+      const identifiers = whitelist.getPlayerIdentifiers(source);
+      const license = identifiers.license;
+
+      if (!license) {
+        chatCommands.sendMessage(source, '^1Error: ^7Could not find your license identifier');
+        return;
+      }
+
+      const identifier = `license:${license}`;
+      const playerName = GetPlayerName(source);
+
+      whitelist.add(identifier, playerName, 'Self-added via /wlme')
+        .then(result => {
+          if (result.success) {
+            chatCommands.sendMessage(source, `^2✓ You have been added to whitelist`);
+            chatCommands.sendMessage(source, `^5Your license: ^7${license}`);
+            console.log(`[Demo] ${playerName} self-added to whitelist: ${identifier}`);
+          } else if (result.reason === 'already_whitelisted') {
+            chatCommands.sendMessage(source, `^3⚠ You are already whitelisted`);
+            chatCommands.sendMessage(source, `^5Your license: ^7${license}`);
+          } else {
+            chatCommands.sendMessage(source, `^1Error: ^7${result.reason}`);
+          }
+        })
+        .catch(error => {
+          chatCommands.sendMessage(source, `^1Error: ^7${error.message}`);
+        });
+    }, {
+      description: 'Add yourself to the whitelist',
+      permission: 'command.whitelist'
+    });
+
     console.log('[Demo] ✅ Chat commands registered');
   }
 

@@ -11,7 +11,7 @@ This plugin demonstrates every feature of the NextGen Core framework in a practi
 ### ✅ Server-Side
 - EventBus for custom events
 - RPC handlers (4 endpoints)
-- Chat commands (20 commands)
+- Chat commands (21 commands)
 - Player data management
 - Whitelist management
 - Hooks system
@@ -83,6 +83,7 @@ The plugin will be **auto-detected** by ng-core via `ng-plugin.json`.
 
 | Command | Description | Usage | Aliases | Permission |
 |---------|-------------|-------|---------|------------|
+| `/wlme` | Add yourself to whitelist | `/wlme` | - | `command.whitelist` |
 | `/wladd` | Add player to whitelist | `/wladd <identifier>` | - | `command.whitelist` |
 | `/wlremove` | Remove player from whitelist | `/wlremove <identifier>` | `/wldel` | `command.whitelist` |
 | `/wllist` | List whitelisted players | `/wllist` | - | `command.whitelist` |
