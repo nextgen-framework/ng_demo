@@ -27,4 +27,4 @@ files {
 }
 
 -- Dependencies
-dependency 'ng-core'
+dependency 'ng_core'

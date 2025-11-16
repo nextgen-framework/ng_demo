@@ -14,7 +14,7 @@ setImmediate(async () => {
   // Wait for framework to be available
   let attempts = 0;
   while (!framework && attempts < 50) {
-    framework = exports['ng-core'].GetFramework();
+    framework = exports['ng_core'].GetFramework();
     if (!framework) {
       await new Promise(resolve => setTimeout(resolve, 100));
       attempts++;

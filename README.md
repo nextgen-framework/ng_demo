@@ -28,25 +28,25 @@ This plugin demonstrates every feature of the NextGen Core framework in a practi
 
 ## 🚀 Installation
 
-1. **Ensure ng-core is installed and started**:
+1. **Ensure ng_core is installed and started**:
 ```lua
 -- In server.cfg
-ensure ng-core
+ensure ng_core
 ```
 
-2. **Add ng-demo to resources**:
+2. **Add ng_demo to resources**:
 ```lua
 -- In server.cfg
-ensure ng-demo
+ensure ng_demo
 ```
 
 3. **Restart server** or run:
 ```
-restart ng-core
-ensure ng-demo
+restart ng_core
+ensure ng_demo
 ```
 
-The plugin will be **auto-detected** by ng-core via `ng-plugin.json`.
+The plugin will be **auto-detected** by ng_core via `ng-plugin.json`.
 
 ## 🎮 How to Use
 
@@ -197,7 +197,7 @@ framework.eventBus.on('DEMO_UPDATE_STATS', (data) => {
 
 ```json
 {
-  "name": "ng-demo",
+  "name": "ng_demo",
   "version": "1.0.0",
   "description": "Complete demonstration plugin",
   "priority": 100,
@@ -207,26 +207,26 @@ framework.eventBus.on('DEMO_UPDATE_STATS', (data) => {
 
 ### Auto-Detection
 
-The plugin is automatically detected by ng-core's plugin-manager because:
+The plugin is automatically detected by ng_core's plugin-manager because:
 1. It has `ng-plugin.json` in the root
 2. It's in the `resources/[ng]/` directory
-3. It's started after ng-core
+3. It's started after ng_core
 
 ### Load Order
 
 ```
-1. ng-core starts
-2. ng-core loads modules (resource-monitor, plugin-manager, etc.)
+1. ng_core starts
+2. ng_core loads modules (resource-monitor, plugin-manager, etc.)
 3. plugin-manager scans for ng-plugin.json
-4. ng-demo is detected and loaded
-5. ng-demo.init() is called
+4. ng_demo is detected and loaded
+5. ng_demo.init() is called
 ```
 
 ## 🎓 Learning from the Demo
 
 ### EventBus Pattern
 ```javascript
-// src/modules/ng-demo/server.js:57
+// src/modules/ng_demo/server.js:57
 this.framework.eventBus.on('PLAYER_CONNECTED', (data) => {
   console.log(`Player connected: ${data.name}`);
 });
@@ -234,7 +234,7 @@ this.framework.eventBus.on('PLAYER_CONNECTED', (data) => {
 
 ### RPC Pattern
 ```javascript
-// src/modules/ng-demo/server.js:69
+// src/modules/ng_demo/server.js:69
 this.framework.rpc.register('demo:getServerInfo', (source) => {
   return {
     serverName: GetConvar('sv_hostname', 'Unknown'),
@@ -245,7 +245,7 @@ this.framework.rpc.register('demo:getServerInfo', (source) => {
 
 ### Chat Commands Pattern
 ```javascript
-// src/modules/ng-demo/server.js:138
+// src/modules/ng_demo/server.js:138
 chatCommands.register('demo', (source) => {
   chatCommands.sendMessage(source, 'Hello!');
 }, {
@@ -256,7 +256,7 @@ chatCommands.register('demo', (source) => {
 
 ### UI Drawing Pattern
 ```javascript
-// src/modules/ng-demo/client.js:200
+// src/modules/ng_demo/client.js:200
 setTick(() => {
   if (this.showUI) {
     this.drawUI();
@@ -291,29 +291,29 @@ await global.Framework.rpc.callServer('demo:giveMoney', 5000)
 await global.Framework.rpc.callServer('demo:getPlayerStats')
 
 // Check if plugin is loaded
-global.Framework.pluginLoader.has('ng-demo')
+global.Framework.pluginLoader.has('ng_demo')
 
 // Get plugin instance
-global.Framework.pluginLoader.get('ng-demo')
+global.Framework.pluginLoader.get('ng_demo')
 ```
 
 ## 🔍 Troubleshooting
 
 ### Plugin Not Loading
 
-1. **Check ng-core is started first**:
+1. **Check ng_core is started first**:
 ```lua
--- In server.cfg, ng-core MUST be before ng-demo
-ensure ng-core
-ensure ng-demo
+-- In server.cfg, ng_core MUST be before ng_demo
+ensure ng_core
+ensure ng_demo
 ```
 
 2. **Check console for errors**:
 ```
-[ng-core] External plugin "ng-demo" loaded successfully
+[ng_core] External plugin "ng_demo" loaded successfully
 ```
 
-3. **Verify ng-plugin.json exists** in `resources/[ng]/ng-demo/`
+3. **Verify ng-plugin.json exists** in `resources/[ng]/ng_demo/`
 
 ### Commands Not Working
 
@@ -332,12 +332,12 @@ global.Framework.getModule('chat-commands')
 
 ## 📚 Next Steps
 
-After exploring ng-demo, try:
+After exploring ng_demo, try:
 
 1. **Create your own module** based on the examples
-2. **Extend ng-demo** with more features
-3. **Create your own plugin** using ng-demo as template
-4. **Read** [MODULES.md](../ng-core/MODULES.md) for API reference
+2. **Extend ng_demo** with more features
+3. **Create your own plugin** using ng_demo as template
+4. **Read** [MODULES.md](../ng_core/MODULES.md) for API reference
 
 ## 📝 Notes
 

@@ -19,7 +19,7 @@ jobs:
         test -f fxmanifest.lua || (echo "fxmanifest.lua not found" && exit 1)
         grep -q "fx_version" fxmanifest.lua || (echo "Missing fx_version" && exit 1)
         grep -q "game" fxmanifest.lua || (echo "Missing game declaration" && exit 1)
-        grep -q "ng-core" fxmanifest.lua || (echo "Missing ng-core dependency" && exit 1)
+        grep -q "ng_core" fxmanifest.lua || (echo "Missing ng_core dependency" && exit 1)
         grep -q "ui_page" fxmanifest.lua || (echo "Missing ui_page declaration" && exit 1)
         echo "✅ fxmanifest.lua is valid"
 
