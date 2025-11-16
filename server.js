@@ -142,7 +142,7 @@ class DemoPlugin {
         chatCommands.sendMessage(source, `  ^2✓ ^7${feature}`);
       });
       chatCommands.sendMessage(source, '^7Try: ^5/demomoney ^7or ^5/demoteleport');
-    }, {
+    }, { plugin: 'ng_demo',
       description: 'Show demo plugin information',
       aliases: ['demoinfo']
     });
@@ -158,7 +158,7 @@ class DemoPlugin {
       this.playerData.set(source, playerData);
 
       chatCommands.sendMessage(source, `^2+$${amount}^7 | Balance: ^2$${playerData.money}`);
-    }, {
+    }, { plugin: 'ng_demo',
       description: 'Give yourself money (demo)',
       usage: '/demomoney [amount]'
     });
@@ -189,7 +189,7 @@ class DemoPlugin {
       // Notify client
       this.framework.rpc.callClient('notify', source, `Teleported to ${location.name}`, 'success')
         .catch(() => {});
-    }, {
+    }, { plugin: 'ng_demo',
       description: 'Teleport to demo locations',
       usage: '/demoteleport <ls|airport|pier|mount>',
       aliases: ['dtp']
@@ -220,7 +220,7 @@ class DemoPlugin {
       // Notify client
       this.framework.rpc.callClient('notify', source, `Spawned ${models[modelName]}`, 'success')
         .catch(() => {});
-    }, {
+    }, { plugin: 'ng_demo',
       description: 'Spawn a demo vehicle',
       usage: '/demovehicle [model]',
       aliases: ['dv']
@@ -237,7 +237,7 @@ class DemoPlugin {
 
       chatCommands.sendMessage(source, `^3=== Online Players (${players.length}) ===`);
       players.forEach(player => chatCommands.sendMessage(source, player));
-    }, {
+    }, { plugin: 'ng_demo',
       description: 'List online players',
       aliases: ['online', 'list']
     });
@@ -252,7 +252,7 @@ class DemoPlugin {
       const message = args.join(' ');
       chatCommands.broadcast(`^3[ANNOUNCEMENT] ^7${message}`);
       console.log(`[Demo] Player ${source} announced: ${message}`);
-    }, {
+    }, { plugin: 'ng_demo',
       description: 'Broadcast message to all players',
       permission: 'command.announce',
       aliases: ['broadcast', 'ann'],
@@ -281,7 +281,7 @@ class DemoPlugin {
       SetEntityCoords(ped, x, y, z, false, false, false, false);
 
       chatCommands.sendMessage(source, `^2Teleported to ^7${GetPlayerName(targetId)}`);
-    }, {
+    }, { plugin: 'ng_demo',
       description: 'Teleport to a player',
       permission: 'command.goto',
       aliases: ['tp'],
@@ -311,7 +311,7 @@ class DemoPlugin {
 
       chatCommands.sendMessage(source, `^2Brought ^7${GetPlayerName(targetId)}^2 to you`);
       chatCommands.sendMessage(targetId, `^2You were brought to ^7${GetPlayerName(source)}`);
-    }, {
+    }, { plugin: 'ng_demo',
       description: 'Bring a player to you',
       permission: 'command.bring',
       params: [
@@ -340,7 +340,7 @@ class DemoPlugin {
         chatCommands.sendMessage(source, `^2Healed ^7${GetPlayerName(targetId)}`);
         chatCommands.sendMessage(targetId, `^2You were healed by ^7${GetPlayerName(source)}`);
       }
-    }, {
+    }, { plugin: 'ng_demo',
       description: 'Heal yourself or a player',
       params: [
         { name: 'player_id', help: 'Target player ID (optional)' }
@@ -370,7 +370,7 @@ class DemoPlugin {
 
       GiveWeaponToPed(ped, GetHashKey(weaponHash), 250, false, true);
       chatCommands.sendMessage(source, `^2Weapon given: ^7${weaponName}`);
-    }, {
+    }, { plugin: 'ng_demo',
       description: 'Give yourself a weapon',
       permission: 'command.weapon',
       aliases: ['gun'],
@@ -386,7 +386,7 @@ class DemoPlugin {
         chatCommands.sendMessage(source, ' ');
       }
       chatCommands.sendMessage(source, '^2Chat cleared');
-    }, {
+    }, { plugin: 'ng_demo',
       description: 'Clear your chat',
       aliases: ['cls']
     });
@@ -403,7 +403,7 @@ class DemoPlugin {
       if (performanceModule) {
         chatCommands.sendMessage(source, '^7Use ^5F10 ^7to toggle client performance overlay');
       }
-    }, {
+    }, { plugin: 'ng_demo',
       description: 'Show server performance stats'
     });
 
@@ -438,7 +438,7 @@ class DemoPlugin {
         .catch(error => {
           chatCommands.sendMessage(source, `^1Error: ^7${error.message}`);
         });
-    }, {
+    }, { plugin: 'ng_demo',
       description: 'Add player to whitelist',
       permission: 'command.whitelist',
       params: [
@@ -476,7 +476,7 @@ class DemoPlugin {
         .catch(error => {
           chatCommands.sendMessage(source, `^1Error: ^7${error.message}`);
         });
-    }, {
+    }, { plugin: 'ng_demo',
       description: 'Remove player from whitelist',
       permission: 'command.whitelist',
       aliases: ['wldel'],
@@ -512,7 +512,7 @@ class DemoPlugin {
         .catch(error => {
           chatCommands.sendMessage(source, `^1Error: ^7${error.message}`);
         });
-    }, {
+    }, { plugin: 'ng_demo',
       description: 'List whitelisted players',
       permission: 'command.whitelist'
     });
@@ -535,7 +535,7 @@ class DemoPlugin {
         chatCommands.sendMessage(source, '^2✓ Whitelist enabled');
         chatCommands.broadcast('^2Server whitelist has been enabled');
       }
-    }, {
+    }, { plugin: 'ng_demo',
       description: 'Toggle whitelist on/off',
       permission: 'command.whitelist'
     });
@@ -577,7 +577,7 @@ class DemoPlugin {
         .catch(error => {
           chatCommands.sendMessage(source, `^1Error: ^7${error.message}`);
         });
-    }, {
+    }, { plugin: 'ng_demo',
       description: 'Add yourself to the whitelist',
       permission: 'command.whitelist'
     });
